@@ -266,7 +266,9 @@ public class MedievalTimes{
                     e.printStackTrace();
                 }
             }
-            else if (choice == 3){
+
+            else if (choice == 3){ ////////////////////////////// REROLL A CHARACTER//////////////////////////
+
                 System.out.print("Filename: ");
                 String fileName = sc.next();
 
@@ -275,47 +277,106 @@ public class MedievalTimes{
 
                 int lines = 0;
                 Character currentChar = new Character();
+
+                int knights = 0;
+                int peasants = 0;
+                int clerics = 0;
+                int mages = 0;
+                int courtiers = 0;
+
+                try {
+
+                    File saveFile = new File(fileName);
+                    Scanner typeReader = new Scanner(saveFile);
+                    typeReader.nextLine();
+
+                    for (int i = 0; i < 4; i++){
+
+                        String data = typeReader.nextLine();
+                        String[] list = data.split("[,]");
+                        currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
+                        if (currentChar.getType().equals("Knight")){
+                            knights += 1;
+                        }
+                        else if (currentChar.getType().equals("Peasant")){
+                            peasants += 1;
+                        }
+                        else if (currentChar.getType().equals("Cleric")){
+                            clerics += 1;
+                        }
+                        else if (currentChar.getType().equals("Mage")){
+                            mages += 1;
+                        }
+                        else if (currentChar.getType().equals("Courtier")){
+                            courtiers += 1;
+                        }
+                        
+                        
+                    }
+
+                } catch(FileNotFoundException e){
+                    e.printStackTrace();
+                }
+
                 try {
 
                     File saveFile = new File(fileName);
                     Scanner fileReader = new Scanner(saveFile);
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(saveFile, true));
                     
-                    
-                    while (fileReader.hasNextLine()){
+                    for (int i = 0; i < 5; i++){
                         String data = fileReader.nextLine();
                         String[] list = data.split("[,]");
+
                         if (lines == 0){
                             try{
-                                FileWriter myWriter = new FileWriter(fileName);
-                                myWriter.write(list[0]);
-                                System.out.print(list[0]);
-                                myWriter.close();
+                                
+                                bw.write(list[0]);
+                                
+                                
                             } catch (IOException e){
                                 System.out.println("An error occured.");
                                 e.printStackTrace();
                             }
                         }
+                        
                         else {
                             if (list[0].equals(characterName)){
+                                String exclude = "";
                                 currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
-                                currentChar.randomize();
-                                currentChar.showCharacter();
-                                // try{
-                                //     FileWriter myWriter = new FileWriter(fileName);
-                                //     myWriter.write(currentChar.getData());
-                                //     currentChar.showCharacter();
-                                //     myWriter.close();
-                                // } catch (IOException e){
-                                //     System.out.println("An error occured.");
-                                //     e.printStackTrace();
-                                // }
+                                if (currentChar.getType() == "Knight" || knights == 2){
+                                    exclude = "Knight";
+                                }
+                                else if (currentChar.getType() == "Peasant"  || peasants == 2){
+                                    exclude = "Peasant";
+                                }
+                                else if (currentChar.getType() == "Cleric"  || clerics == 2){
+                                    exclude = "Cleric";
+                                }
+                                else if (currentChar.getType() == "Mage"  || mages == 2){
+                                    exclude = "Mage";
+                                }
+                                else if (currentChar.getType() == "Courtier"  || courtiers == 2){
+                                    exclude = "Courtier";
+                                }
+                                currentChar.randomize(exclude);
+                                //currentChar.showCharacter();
+                                try{
+                                    
+                                    bw.write("\n" + currentChar.getData());
+                                    
+                                    
+                                } catch (IOException e){
+                                    System.out.println("An error occured.");
+                                    e.printStackTrace();
+                                }
                             }
                             else{
                                 currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
                                 try{
-                                    FileWriter myWriter = new FileWriter(fileName);
-                                    myWriter.write("\n" + currentChar.getData());
-                                    myWriter.close();
+                                    
+                                    bw.write("\n" + currentChar.getData());
+                                    
                                 } catch (IOException e){
                                     System.out.println("An error occured.");
                                     e.printStackTrace();
@@ -325,10 +386,16 @@ public class MedievalTimes{
                         lines += 1;
                         
                     }
+                    
+                    FileWriter myWriter = new FileWriter(saveFile, false);
+                    myWriter.close();
+                    bw.close();
                 } catch (FileNotFoundException e){
                     System.out.println("An error occured.");
                     e.printStackTrace();
-                } 
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
 
                 
             }

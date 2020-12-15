@@ -105,29 +105,38 @@ public class Character{
         System.out.println("Total: " + total);
     }
 
-    public void randomize(){
+    public void randomize(String exclude){
         String newType;
-        int randomType = randomGenerator.nextInt(5);
-        if (randomType == 0){
-            newType = "Knight";
-            generateCharacter(character, newType);
+        boolean x = true;
+        while (x == true){
+            int randomType = randomGenerator.nextInt(5);
+            if (randomType == 0 && exclude != "Knight"){
+                x = false;
+                newType = "Knight";
+                generateCharacter(character, newType);
+            }
+            else if (randomType == 1 && exclude != "Peasant"){
+                x = false;
+                newType = "Peasant";
+                generateCharacter(character, newType);
+            }
+            else if (randomType == 2 && exclude != "Cleric"){
+                x = false;
+                newType = "Cleric";
+                generateCharacter(character, newType);
+            }
+            else if (randomType == 3 && exclude != "Mage"){
+                x = false;
+                newType = "Mage";
+                generateCharacter(character, newType);
+            }
+            else if (randomType == 4 && exclude != "Courtier"){
+                x = false;
+                newType = "Courtier";
+                generateCharacter(character, newType);
+            }
         }
-        else if (randomType == 1){
-            newType = "Peasant";
-            generateCharacter(character, newType);
-        }
-        else if (randomType == 2){
-            newType = "Cleric";
-            generateCharacter(character, newType);
-        }
-        else if (randomType == 3){
-            newType = "Mage";
-            generateCharacter(character, newType);
-        }
-        else if (randomType == 4){
-            newType = "Courtier";
-            generateCharacter(character, newType);
-        }
+        
     }
 
     public String getData(){
@@ -148,6 +157,11 @@ public class Character{
         this.intelligence = intelligence;
         this.magic = magic;
         this.influence = influence;
+    }
+
+    public String getType(){
+        String type = this.type;
+        return type;
     }
     
 }
