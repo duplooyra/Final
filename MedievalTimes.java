@@ -53,7 +53,7 @@ public class MedievalTimes{
             System.out.println("\n \n \n");
             char1.showCharacter();
             while (x == 1){
-                System.out.println("Would you like to reroll your character y/n? ");
+                System.out.println("Would you like to reroll your character y/n? \n \n \n");
                 String yn = sc.next();
                 if (yn.equals("n")){
                     x = 0;
@@ -92,7 +92,7 @@ public class MedievalTimes{
             System.out.println("\n \n \n");
             char2.showCharacter();
             while (x == 1){
-                System.out.println("Would you like to reroll your character y/n? ");
+                System.out.println("Would you like to reroll your character y/n? \n \n \n");
                 String yn = sc.next();
                 if (yn.equals("n")){
                     x = 0;
@@ -159,7 +159,7 @@ public class MedievalTimes{
             System.out.println("\n \n \n");
             char3.showCharacter();
             while (x == 1){
-                System.out.println("Would you like to reroll your character y/n? ");
+                System.out.println("Would you like to reroll your character y/n? \n \n \n");
                 String yn = sc.next();
                 if (yn.equals("n")){
                     x = 0;
@@ -225,7 +225,7 @@ public class MedievalTimes{
             System.out.println("\n \n \n");
             char4.showCharacter();
             while (x == 1){
-                System.out.println("Would you like to reroll your character y/n? ");
+                System.out.println("Would you like to reroll your character y/n? \n \n \n");
                 String yn = sc.next();
                 if (yn.equals("n")){
                     x = 0;
@@ -251,18 +251,89 @@ public class MedievalTimes{
                 e.printStackTrace();
             }
             }
-            else if (choice == 2){
+
+            else if (choice == 2){ /////////////////////////////// VALIDATE SAVE FILE/////////////////////////////////
+                System.out.print("Filename: ");
                 String fileName = sc.next();
-                try{
-                    File myObj = new File(fileName);
-                    Scanner myReader = new Scanner(myObj);
-                    while (myReader.hasNextLine()){
-                        String data = myReader.nextLine();
-                        System.out.println(data);
+
+                int knights = 0;
+                int peasants = 0;
+                int clerics = 0;
+                int mages = 0;
+                int courtiers = 0;
+                int checks = 0;
+
+                try {
+
+                    File saveFile = new File(fileName);
+                    Scanner scanner1 = new Scanner(saveFile);
+                    Scanner scanner2 = new Scanner(saveFile);
+                    scanner1.nextLine();
+                    Character currentChar = new Character();
+
+                    for (int i = 0; i < 4; i++){
+
+                        String data = scanner1.nextLine();
+                        String[] list = data.split("[,]");
+                        currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
+                        if (currentChar.getType().equals("Knight")){
+                            knights += 1;
+                        }
+                        else if (currentChar.getType().equals("Peasant")){
+                            peasants += 1;
+                        }
+                        else if (currentChar.getType().equals("Cleric")){
+                            clerics += 1;
+                        }
+                        else if (currentChar.getType().equals("Mage")){
+                            mages += 1;
+                        }
+                        else if (currentChar.getType().equals("Courtier")){
+                            courtiers += 1;
+                        }
+
+                        if (knights > 2 || peasants > 2 || clerics > 2 || mages > 2 || courtiers >2){
+                            System.out.println("ERROR FOUND - Too many of the same character types");
+                        }
+
+                        else{
+                            checks += 1;
+                        }
+                        
                     }
-                    myReader.close();
-                } catch (FileNotFoundException e){
-                    System.out.println("An error occured.");
+                    int lines = 0;
+                    
+                    for (int i = 0; i < 5; i++){
+                        String data = scanner2.nextLine();
+                        String[] list = data.split("[,]");
+                        if (lines == 0){
+                            if (list.length > 1 || list.length < 0){
+                                System.out.println("ERROR FOUND - Title Array Error");
+                            }
+                            else{
+                                checks += 1;
+                            }
+                            
+                        }
+                        else{
+                            if (list.length > 7 || list.length < 0){
+                                System.out.println("ERROR FOUND - Character Array Error");
+                            }
+                            else{
+                                checks += 1;
+                            }
+                        }
+                        lines += 1;
+                        
+                    }
+                    if (checks >= 5){
+                        System.out.println("FILE SUCCESSFULLY VALIDATED");
+                    }
+                    scanner1.close();
+                    scanner2.close();
+                } 
+                
+                catch(FileNotFoundException e){
                     e.printStackTrace();
                 }
             }
@@ -313,10 +384,12 @@ public class MedievalTimes{
                         
                         
                     }
+                    typeReader.close();
 
                 } catch(FileNotFoundException e){
                     e.printStackTrace();
                 }
+                
 
                 try {
 
@@ -344,19 +417,20 @@ public class MedievalTimes{
                             if (list[0].equals(characterName)){
                                 String exclude = "";
                                 currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
-                                if (currentChar.getType() == "Knight" || knights == 2){
+
+                                if (currentChar.getType() == "Knight" || knights >= 2){
                                     exclude = "Knight";
                                 }
-                                else if (currentChar.getType() == "Peasant"  || peasants == 2){
+                                else if (currentChar.getType() == "Peasant"  || peasants >= 2){
                                     exclude = "Peasant";
                                 }
-                                else if (currentChar.getType() == "Cleric"  || clerics == 2){
+                                else if (currentChar.getType() == "Cleric"  || clerics >= 2){
                                     exclude = "Cleric";
                                 }
-                                else if (currentChar.getType() == "Mage"  || mages == 2){
+                                else if (currentChar.getType() == "Mage"  || mages >= 2){
                                     exclude = "Mage";
                                 }
-                                else if (currentChar.getType() == "Courtier"  || courtiers == 2){
+                                else if (currentChar.getType() == "Courtier"  || courtiers >= 2){
                                     exclude = "Courtier";
                                 }
                                 currentChar.randomize(exclude);
@@ -386,6 +460,7 @@ public class MedievalTimes{
                         lines += 1;
                         
                     }
+                    fileReader.close();
                     
                     FileWriter myWriter = new FileWriter(saveFile, false);
                     myWriter.close();
@@ -398,6 +473,13 @@ public class MedievalTimes{
                 }
 
                 
+            }
+            else if (choice == 4){
+                System.exit(0);
+            }
+
+            else{
+                System.out.println("Please pick a valid choice");
             }
 
         
