@@ -267,47 +267,70 @@ public class MedievalTimes{
                 }
             }
             else if (choice == 3){
-                int x = 1;
-                
                 System.out.print("Filename: ");
                 String fileName = sc.next();
-                
-                String character = "";
 
                 System.out.print("Character Name: ");
                 String characterName = sc.next();
 
-                
+                int lines = 0;
+                Character currentChar = new Character();
                 try {
+
                     File saveFile = new File(fileName);
-                    FileWriter myWriter = new FileWriter(fileName);
                     Scanner fileReader = new Scanner(saveFile);
-                    fileReader.nextLine();
-                    Character char1 = new Character();
+                    
                     
                     while (fileReader.hasNextLine()){
                         String data = fileReader.nextLine();
-                        character = data;
-                        String[] characterData = character.split("[,]");
-
-                        if (characterData[0].equals(characterName)){
-                            
-                            char1.loadCharacter(characterData[0], characterData[1], Integer.parseInt(characterData[2]), Integer.parseInt(characterData[3]), Integer.parseInt(characterData[4]), Integer.parseInt(characterData[5]), Integer.parseInt(characterData[6]));
-                            char1.randomize();
+                        String[] list = data.split("[,]");
+                        if (lines == 0){
+                            try{
+                                FileWriter myWriter = new FileWriter(fileName);
+                                myWriter.write(list[0]);
+                                System.out.print(list[0]);
+                                myWriter.close();
+                            } catch (IOException e){
+                                System.out.println("An error occured.");
+                                e.printStackTrace();
+                            }
                         }
                         else {
-
-                            char1.loadCharacter(characterData[0], characterData[1], Integer.parseInt(characterData[2]), Integer.parseInt(characterData[3]), Integer.parseInt(characterData[4]), Integer.parseInt(characterData[5]), Integer.parseInt(characterData[6]));
-                            myWriter.write("\n" + char1.getData());
-                        } 
-                        
+                            if (list[0].equals(characterName)){
+                                currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
+                                currentChar.randomize();
+                                currentChar.showCharacter();
+                                // try{
+                                //     FileWriter myWriter = new FileWriter(fileName);
+                                //     myWriter.write(currentChar.getData());
+                                //     currentChar.showCharacter();
+                                //     myWriter.close();
+                                // } catch (IOException e){
+                                //     System.out.println("An error occured.");
+                                //     e.printStackTrace();
+                                // }
+                            }
+                            else{
+                                currentChar.loadCharacter(list[0], list[1], Integer.parseInt(list[2]), Integer.parseInt(list[3]), Integer.parseInt(list[4]), Integer.parseInt(list[5]), Integer.parseInt(list[6]));
+                                try{
+                                    FileWriter myWriter = new FileWriter(fileName);
+                                    myWriter.write("\n" + currentChar.getData());
+                                    myWriter.close();
+                                } catch (IOException e){
+                                    System.out.println("An error occured.");
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        lines += 1;
                         
                     }
-                    fileReader.close();
                 } catch (FileNotFoundException e){
                     System.out.println("An error occured.");
                     e.printStackTrace();
-                }
+                } 
+
+                
             }
 
         
