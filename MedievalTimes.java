@@ -291,14 +291,17 @@ public class MedievalTimes{
                         else if (currentChar.getType().equals("Courtier")){
                             courtiers += 1;
                         }
+                        else{
+                            System.out.println("ERROR FOUND - Invalid Character Type");
+                        }
 
                         if (knights > 2 || peasants > 2 || clerics > 2 || mages > 2 || courtiers >2){
                             System.out.println("ERROR FOUND - Too many of the same character types");
-                        }
-
-                        else{
+                        } else{
                             checks += 1;
                         }
+
+                        
                         
                     }
                     int lines = 0;
@@ -326,7 +329,7 @@ public class MedievalTimes{
                         lines += 1;
                         
                     }
-                    if (checks >= 5){
+                    if (checks == 5){
                         System.out.println("FILE SUCCESSFULLY VALIDATED");
                     }
                     scanner1.close();

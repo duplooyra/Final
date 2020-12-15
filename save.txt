@@ -1,5 +1,5 @@
 Fortnite 2
 Cade,Knight,8,3,1,6,6
-Jesse,Knight,8,1,3,2,6
+Jesse,Courtier,2,1,1,1,9
 Owen,Cleric,5,5,7,0,0
 Nick,Mage,4,6,6,8,4
